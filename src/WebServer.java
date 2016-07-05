@@ -209,10 +209,17 @@ class Worker extends WebServer implements  Runnable {
 
 
 
-                    String res = qCconv.convert("qqq");
+                    String res = query;
+
+                    query = qCconv.convert(query);
+
+                    res += "<p/>\n"+query;
+
+                    res += "<p/>\n"+runProcess(d2rQuery +" -f "+d2rFormanOut + " -b http://simm.com/  " + d2rMappingFile +" \""+ query +"\"");
 
 
-                    if(debug > 0) res = query+"<p/>\n"+res;
+
+                   // if(debug > 0) res = query+"<p/>\n"+res;
 
 
                     writeResponse(res, s.getOutputStream());
