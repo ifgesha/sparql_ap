@@ -1,0 +1,170 @@
+@prefix map: <#> .
+@prefix db: <> .
+@prefix vocab: <vocab/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix d2rq: <http://www.wiwiss.fu-berlin.de/suhl/bizer/D2RQ/0.1#> .
+@prefix jdbc: <http://d2rq.org/terms/jdbc/> .
+
+map:database a d2rq:Database;
+	d2rq:jdbcDriver "com.mysql.jdbc.Driver";
+	d2rq:jdbcDSN "jdbc:mysql://10.10.0.55/tv_stat";
+	d2rq:username "d2rq";
+	d2rq:password "39545";
+	jdbc:autoReconnect "true";
+	jdbc:zeroDateTimeBehavior "convertToNull";
+	.
+
+# Table channel
+map:channel a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "channel/@@channel.id@@";
+	d2rq:class vocab:channel;
+	d2rq:classDefinitionLabel "channel";
+	.
+map:channel__label a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:channel;
+	d2rq:property rdfs:label;
+	d2rq:pattern "channel #@@channel.id@@";
+	.
+map:channel_id a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:channel;
+	d2rq:property vocab:channel_id;
+	d2rq:propertyDefinitionLabel "channel id";
+	d2rq:column "channel.id";
+	d2rq:datatype xsd:integer;
+	.
+map:channel_ip a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:channel;
+	d2rq:property vocab:channel_ip;
+	d2rq:propertyDefinitionLabel "channel ip";
+	d2rq:column "channel.ip";
+	.
+map:channel_name a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:channel;
+	d2rq:property vocab:channel_name;
+	d2rq:propertyDefinitionLabel "channel name";
+	d2rq:column "channel.name";
+	.
+
+# Table gps
+map:gps a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "gps/@@gps.id@@";
+	d2rq:class vocab:gps;
+	d2rq:classDefinitionLabel "gps";
+	.
+map:gps__label a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:gps;
+	d2rq:property rdfs:label;
+	d2rq:pattern "gps #@@gps.id@@";
+	.
+map:gps_id a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:gps;
+	d2rq:property vocab:gps_id;
+	d2rq:propertyDefinitionLabel "gps id";
+	d2rq:column "gps.id";
+	d2rq:datatype xsd:integer;
+	.
+map:gps_sms_dt a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:gps;
+	d2rq:property vocab:gps_sms_dt;
+	d2rq:propertyDefinitionLabel "gps sms_dt";
+	d2rq:column "gps.sms_dt";
+	d2rq:datatype xsd:dateTime;
+	.
+map:gps_gps_dt a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:gps;
+	d2rq:property vocab:gps_gps_dt;
+	d2rq:propertyDefinitionLabel "gps gps_dt";
+	d2rq:column "gps.gps_dt";
+	d2rq:datatype xsd:dateTime;
+	.
+map:gps_tel a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:gps;
+	d2rq:property vocab:gps_tel;
+	d2rq:propertyDefinitionLabel "gps tel";
+	d2rq:column "gps.tel";
+	.
+map:gps_lat a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:gps;
+	d2rq:property vocab:gps_lat;
+	d2rq:propertyDefinitionLabel "gps lat";
+	d2rq:column "gps.lat";
+	d2rq:datatype xsd:double;
+	.
+map:gps_long a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:gps;
+	d2rq:property vocab:gps_long;
+	d2rq:propertyDefinitionLabel "gps long";
+	d2rq:column "gps.long";
+	d2rq:datatype xsd:double;
+	.
+map:gps_alt a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:gps;
+	d2rq:property vocab:gps_alt;
+	d2rq:propertyDefinitionLabel "gps alt";
+	d2rq:column "gps.alt";
+	.
+map:gps_speed a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:gps;
+	d2rq:property vocab:gps_speed;
+	d2rq:propertyDefinitionLabel "gps speed";
+	d2rq:column "gps.speed";
+	d2rq:datatype xsd:integer;
+	.
+map:gps_txt a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:gps;
+	d2rq:property vocab:gps_txt;
+	d2rq:propertyDefinitionLabel "gps txt";
+	d2rq:column "gps.txt";
+	.
+
+# Table stat
+map:stat a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "stat/@@stat.id@@";
+	d2rq:class vocab:stat;
+	d2rq:classDefinitionLabel "stat";
+	.
+map:stat__label a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:stat;
+	d2rq:property rdfs:label;
+	d2rq:pattern "stat #@@stat.id@@";
+	.
+map:stat_id a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:stat;
+	d2rq:property vocab:stat_id;
+	d2rq:propertyDefinitionLabel "stat id";
+	d2rq:column "stat.id";
+	d2rq:datatype xsd:integer;
+	.
+map:stat_sw a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:stat;
+	d2rq:property vocab:stat_sw;
+	d2rq:propertyDefinitionLabel "stat sw";
+	d2rq:column "stat.sw";
+	.
+map:stat_port a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:stat;
+	d2rq:property vocab:stat_port;
+	d2rq:propertyDefinitionLabel "stat port";
+	d2rq:column "stat.port";
+	d2rq:datatype xsd:integer;
+	.
+map:stat_ch_id a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:stat;
+	d2rq:property vocab:stat_ch_id;
+	d2rq:propertyDefinitionLabel "stat ch_id";
+	d2rq:column "stat.ch_id";
+	d2rq:datatype xsd:integer;
+	.
+map:stat_date_time a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:stat;
+	d2rq:property vocab:stat_date_time;
+	d2rq:propertyDefinitionLabel "stat date_time";
+	d2rq:column "stat.date_time";
+	d2rq:datatype xsd:dateTime;
+	.
+
