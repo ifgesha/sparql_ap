@@ -1,9 +1,13 @@
 import java.io.*;
-import java.net.*;
-import java.util.*;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.URLDecoder;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import d2rq.*;
 
 class WebServer {
 
@@ -27,7 +31,7 @@ class WebServer {
     static String simMappingFile = "smapping.txt";
 
 
-
+    static QueryConverter qCconv;
 
 
     public static ServerSocket ss;
@@ -57,7 +61,7 @@ class WebServer {
             r = props.getProperty("workers");
             if(r != null) {  workers = Integer.parseInt(r);}
 
-            r = props.getProperty("mappingFile");
+            r = props.getProperty("d2rMappingFile");
             if(r != null) {   d2rMappingFile = r;  }
 
             r = props.getProperty("d2rQuery");
@@ -88,6 +92,11 @@ class WebServer {
     public static void main(String[] a) throws Exception {
         loadProps();
         printProps();
+
+
+        qCconv = new QueryConverter(simMappingFile);
+
+
         for(int i=0;i<workers;i++) {
             Worker w = new Worker();
             (new Thread(w, "worker #"+i)).start();
@@ -194,7 +203,13 @@ class Worker extends WebServer implements  Runnable {
                     String query =  URLDecoder.decode( m.group(1),"UTF-8");
                     //System.out.println("Query: " + query);
 
-                    String res = runProcess(d2rQuery +" -f "+d2rFormanOut + "  " + d2rMappingFile +" \""+ query +"\"");
+                    ////////////////////////////////////String res = runProcess(d2rQuery +" -f "+d2rFormanOut + "  " + d2rMappingFile +" \""+ query +"\"");
+
+
+
+
+
+                    String res = qCconv.convert("qqq");
 
 
                     if(debug > 0) res = query+"<p/>\n"+res;
