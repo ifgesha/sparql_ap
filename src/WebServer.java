@@ -2,12 +2,21 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URLDecoder;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Vector;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+
+class sourceList {
+    String title;
+    String d2rMappingFile;
+    String simMappingFile;
+    QueryConverter converter;
+
+    void convInit() throws IOException {
+        this.converter = new QueryConverter(simMappingFile);
+    }
+}
 
 class WebServer {
 
@@ -30,11 +39,19 @@ class WebServer {
 
     static String simMappingFile = "smapping.txt";
 
+    static sourceList[] source;
 
     static QueryConverter qCconv;
 
 
     public static ServerSocket ss;
+
+
+
+
+
+
+
 
     static void loadProps() throws IOException {
         File f = new File(System.getProperty("user.dir")+File.separator+"WebServer.ini");
@@ -74,11 +91,38 @@ class WebServer {
             if(r != null) {  simMappingFile = r;   }
 
 
+            r = props.getProperty("source_enable");
+            if(r != null) {
+                String[] parts = r.replaceAll(" ","").split(";");
+                source = new sourceList[parts.length];
+                for (int i = 0; i < parts.length; ++i)
+                {
+
+                    sourceList s = new sourceList();
+
+                    s.title = parts[i];
+
+                    r = props.getProperty(parts[i]+"_d2rMappingFile");
+                    if(r != null) { s.d2rMappingFile  = r;   }
+
+                    r = props.getProperty(parts[i]+"_simMappingFile");
+                    if(r != null) {
+                        s.simMappingFile = r;
+                        //s.converter =  new QueryConverter(r); // Инициализация конверторов для каждого источника данных
+                    }
+
+                    source[i] = s;
+
+                }
+            }
+
+
 
         }
     }
 
     static void printProps() {
+        p("---- Config ------");
         p("root="+root);
         p("port="+port);
         p("timeout="+timeout);
@@ -87,14 +131,35 @@ class WebServer {
         p("d2rQuery="+d2rQuery);
         p("mappingFile="+d2rMappingFile);
 
+
+        for (int i = 0; i < source.length; ++i)
+        {
+            p("\nSource title = "+source[i].title);
+            p("Source d2rMappingFile = "+source[i].d2rMappingFile);
+            p("Source simMappingFile = "+source[i].simMappingFile);
+        }
+
+        p("---------------");
+
+
+
     }
 
     public static void main(String[] a) throws Exception {
         loadProps();
         printProps();
 
+        // Инициализация конверторов для каждого источника данных
+        p("\n------Dictionary init---------\n");
+        for (int i = 0; i < source.length; ++i){
+            p("source "+source[i].title);
+            source[i].convInit();
+            p("\n");
+        }
 
-        qCconv = new QueryConverter(simMappingFile);
+
+       // qCconv = new QueryConverter(simMappingFile);
+
 
 
         for(int i=0;i<workers;i++) {
@@ -117,6 +182,9 @@ class WebServer {
                 }
             }
         }
+
+
+
     }
 }
 
