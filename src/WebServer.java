@@ -272,18 +272,24 @@ class Worker extends WebServer implements  Runnable {
                     //System.out.println("Query: " + query);
 
                     ////////////////////////////////////String res = runProcess(d2rQuery +" -f "+d2rFormanOut + "  " + d2rMappingFile +" \""+ query +"\"");
-
-
-
-
-
                     String res = query;
 
-                    query = qCconv.convert(query);
 
-                    res += "<p/>\n"+query;
+                    p("\n\n------------------------------------------------------\nQuery = "+query);
 
-                    res += "<p/>\n"+runProcess(d2rQuery +" -f "+d2rFormanOut + " -b http://simm.com/  " + d2rMappingFile +" \""+ query +"\"");
+                    // Выполнение запросов к базам
+                    for (int i = 0; i < source.length; ++i)
+                    {
+                        String convertQuery = source[i].converter.convert(query);
+                        p("\n----------- "+source[i].title + "convert  ------------- \nquery = "+convertQuery);
+
+
+                        res += "<p/>\n"+convertQuery;
+                        res += "<p/>\n"+runProcess(d2rQuery +" -f "+d2rFormanOut + " -b http://simm.com/  " + d2rMappingFile +" \""+ convertQuery +"\"");
+
+
+                    }
+
 
 
 
@@ -295,12 +301,12 @@ class Worker extends WebServer implements  Runnable {
 
                 }else{
                     String err = "Bad input parametrs. Query not found.";
-                    System.out.println("WARNING: "+err);
+                  //  System.out.println("WARNING: "+err);
                     writeResponse(err, s.getOutputStream());
                 }
 
             }else{
-                System.out.println("WARNING: GET params not found");
+               // System.out.println("WARNING: GET params not found");
                 // TODO отправка сообщения что работаем только с GET
             }
 
