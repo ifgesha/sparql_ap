@@ -43,6 +43,8 @@ class WebServer {
 
     static QueryConverter qCconv;
 
+    static String indexPage;
+
 
     public static ServerSocket ss;
 
@@ -149,6 +151,13 @@ class WebServer {
         loadProps();
         printProps();
 
+
+        indexPage = getIndexPage();
+
+        //p(indexPage);
+
+
+
         // Инициализация конверторов для каждого источника данных
         p("\n------Dictionary init---------\n");
         for (int i = 0; i < source.length; ++i){
@@ -186,6 +195,35 @@ class WebServer {
 
 
     }
+
+
+
+    public static String getIndexPage(){
+        String out = "";
+
+        try(FileReader reader = new FileReader("index.html"))
+        {
+            // читаем посимвольно
+            int c;
+            while((c=reader.read())!=-1){
+
+                out +=(char)c;
+            }
+
+
+        }
+        catch(IOException ex){
+
+            System.out.println(ex.getMessage());
+        }
+
+
+        return out;
+
+
+    }
+
+
 }
 
 class Worker extends WebServer implements  Runnable {
@@ -272,7 +310,7 @@ class Worker extends WebServer implements  Runnable {
                     //System.out.println("Query: " + query);
 
                     ////////////////////////////////////String res = runProcess(d2rQuery +" -f "+d2rFormanOut + "  " + d2rMappingFile +" \""+ query +"\"");
-                    String res = query;
+                    String res = "<plaintext >"+query;
 
 
                     p("\n\n------------------------------------------------------\nQuery = "+query);
@@ -284,16 +322,15 @@ class Worker extends WebServer implements  Runnable {
                         p("\n----------- "+source[i].title + "convert  ------------- \nquery = "+convertQuery);
 
 
-                        res += "<p/>\n"+convertQuery;
-                        res += "<p/>\n"+runProcess(d2rQuery +" -f "+d2rFormanOut + " -b http://simm.com/  " + d2rMappingFile +" \""+ convertQuery +"\"");
+                        res += "\n\n\n\n"+convertQuery;
+                        res += "\n\n"+runProcess(d2rQuery +" -f "+d2rFormanOut + " -b http://simm.com/  " + source[i].d2rMappingFile +" \""+ convertQuery +"\"")+"\n\n";
 
 
                     }
 
 
-
-
                    // if(debug > 0) res = query+"<p/>\n"+res;
+
 
 
                     writeResponse(res, s.getOutputStream());
@@ -302,7 +339,11 @@ class Worker extends WebServer implements  Runnable {
                 }else{
                     String err = "Bad input parametrs. Query not found.";
                   //  System.out.println("WARNING: "+err);
-                    writeResponse(err, s.getOutputStream());
+                  //  writeResponse(err, s.getOutputStream());
+                    //writeResponse(indexPage, s.getOutputStream());
+                    writeResponse(getIndexPage(), s.getOutputStream());
+
+
                 }
 
             }else{
@@ -373,10 +414,14 @@ class Worker extends WebServer implements  Runnable {
         BufferedReader in = new BufferedReader(new InputStreamReader(ins));
         while ((line = in.readLine()) != null) {
             if(sysout) System.out.println(name + " " + line);
-            out += line;
+            out += line+"\n";
         }
         return out;
     }
+
+
+
+
 
 
 
