@@ -324,8 +324,6 @@ class Worker extends WebServer implements  Runnable {
 
                         res += "\n\n\n\n"+convertQuery;
                         res += "\n\n"+runProcess(d2rQuery +" -f "+d2rFormanOut + " -b http://simm.com/  " + source[i].d2rMappingFile +" \""+ convertQuery +"\"")+"\n\n";
-
-
                     }
 
 
@@ -383,11 +381,12 @@ class Worker extends WebServer implements  Runnable {
     // Отправка ответа клиенту
     private void writeResponse(String s, OutputStream os) throws Throwable {
         String response = "HTTP/1.1 200 OK\r\n" +
-                "Server: YarServer/2009-09-09\r\n" +
+                "Server: YarServer/2016-09-09\r\n" +
                 "Content-Type: text/html\r\n" +
                 "Content-Length: " + s.length() + "\r\n" +
                 "Connection: close\r\n\r\n";
-        String result = response + s;
+        //String result = response + s;
+        String result =  s;
         os.write(result.getBytes());
         os.flush();
     }
@@ -400,9 +399,9 @@ class Worker extends WebServer implements  Runnable {
         String out = "";
         Process pro = Runtime.getRuntime().exec(command);
         out += printLines(command + " stdout:", pro.getInputStream(), false);
-        printLines(command + " stderr:", pro.getErrorStream(), true);
+        out += printLines(command + " stderr:", pro.getErrorStream(), true);
         pro.waitFor();
-        System.out.println(command + " exitValue() " + pro.exitValue());
+       // System.out.println(command + " exitValue() " + pro.exitValue());
         return out;
     }
 
