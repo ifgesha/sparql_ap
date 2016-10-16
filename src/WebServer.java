@@ -2,6 +2,7 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URLDecoder;
+import java.nio.charset.Charset;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -312,6 +313,10 @@ class Worker extends WebServer implements  Runnable {
                     ////////////////////////////////////String res = runProcess(d2rQuery +" -f "+d2rFormanOut + "  " + d2rMappingFile +" \""+ query +"\"");
                     String res = "<plaintext >"+query;
 
+                    if(d2rFormanOut.equals("json")){
+                        res = "{\n\"query\": \""+query + "\",\n \"sources\": [\n";
+                    }
+
 
                     p("\n\n------------------------------------------------------\nQuery = "+query);
 
@@ -321,9 +326,25 @@ class Worker extends WebServer implements  Runnable {
                         String convertQuery = source[i].converter.convert(query);
                         p("\n----------- "+source[i].title + "convert  ------------- \nquery = "+convertQuery);
 
+                        String qres = runProcess(d2rQuery +" -f "+d2rFormanOut + " -b http://simm.com/  " + source[i].d2rMappingFile +" \""+ convertQuery +"\"");
 
-                        res += "\n\n\n\n"+convertQuery;
-                        res += "\n\n"+runProcess(d2rQuery +" -f "+d2rFormanOut + " -b http://simm.com/  " + source[i].d2rMappingFile +" \""+ convertQuery +"\"")+"\n\n";
+                        //p(qres);
+
+
+                        if(d2rFormanOut.equals("json")){
+                            res += "\t\t{\n\"source_"+i+"\": {\"query\": \""+convertQuery + "\", \"result\": "+qres+"\n\n}},";
+
+                        }else{
+
+                            res += "\n\n\n\n"+convertQuery;
+                            res += "\n\n"+qres+"\n\n";
+                        }
+
+                    }
+
+                    if(d2rFormanOut.equals("json")){
+                        res = res.substring(0, res.length()-1);
+                        res += "\n]}";
                     }
 
 
@@ -383,16 +404,31 @@ class Worker extends WebServer implements  Runnable {
         String response = "HTTP/1.1 200 OK\r\n" +
                 "Server: YarServer/2016-09-09\r\n" +
                 "Content-Type: text/html\r\n" +
-                "Content-Length: " + s.length() + "\r\n" +
+                //"Content-Length: " + (s.length()+34) + "\r\n" +
                 "Connection: close\r\n\r\n";
-        //String result = response + s;
-        String result =  s;
-        os.write(result.getBytes());
+        String result = response + s;
+       // String result =  s;
+
+        p(new String( result.getBytes( "UTF-8" )));
+
+        System.out.println( result.length());
+
+        os.write(result.getBytes(Charset.forName("UTF-8")));
         os.flush();
+
+
     }
+/*
+    HTTP/1.1 200 OK
+    Last-Modified: Tue, 25 Sep 2007 21:40:05 GMT
+    Expires: Tue, 25 Sep 2007 21:40:05 GMT
+    Server: Azureus 3.0.2.2
+    Connection: close
+    Content-Type: text/xml; charset="utf-8"
+    Content-Length: 339
 
-
-
+    <?xml version="1.0" encoding="UTF-8"?>
+*/
 
     // запустить в консоле
     private static String runProcess(String command) throws Exception {
