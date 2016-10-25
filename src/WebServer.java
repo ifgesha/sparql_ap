@@ -326,7 +326,8 @@ class Worker extends WebServer implements  Runnable {
                         String convertQuery = source[i].converter.convert(query);
                         p("\n----------- "+source[i].title + "convert  ------------- \nquery = "+convertQuery);
 
-                        String qres = runProcess(d2rQuery +" -f "+d2rFormanOut + " -b http://simm.com/  " + source[i].d2rMappingFile +" \""+ convertQuery +"\"");
+                        //String qres = runProcess(d2rQuery +" -f "+d2rFormanOut + " -b http://simm.com/ " + source[i].d2rMappingFile +" \""+ convertQuery +"\"");
+                        String qres = runProcess(new String[]{d2rQuery ,"-f", d2rFormanOut ,"-b", "http://simm.com/" ,source[i].d2rMappingFile, convertQuery});
 
                         //p(qres);
 
@@ -431,7 +432,7 @@ class Worker extends WebServer implements  Runnable {
 */
 
     // запустить в консоле
-    private static String runProcess(String command) throws Exception {
+    private static String runProcess(String[] command) throws Exception {
         String out = "";
         Process pro = Runtime.getRuntime().exec(command);
         out += printLines(command + " stdout:", pro.getInputStream(), false);
