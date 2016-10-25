@@ -1,0 +1,16 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="sparql_ap:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/sparql_ap_jar</output-path>
+    <root id="archive" name="sparql_ap.jar">
+      <element id="module-output" name="sparql_ap" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/d2rq-0.8.1/lib/velocity-1.7/commons-lang-2.4.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/d2rq-0.8.1/lib/velocity-1.7/oro-2.0.8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/d2rq-0.8.1/lib/velocity-1.7/velocity-1.7.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/d2rq-0.8.1/lib/velocity-1.7/commons-collections-3.2.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/velocity-1.7/commons-lang-2.4.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/velocity-1.7/velocity-1.7.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/velocity-1.7/oro-2.0.8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/velocity-1.7/commons-collections-3.2.1.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
